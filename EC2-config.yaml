@@ -1,0 +1,10 @@
+ImageId: 'ami-0bb4c991fa89d4b9b'
+MinCount: 1
+MaxCount: 1
+InstanceType: 't2.micro'
+KeyName: 'l00157158_key_pair'
+Tags:
+  - Key: 'Name'
+    Value: 'L00157158-EC2-03'
+  - Key: 'Environment'
+    Value: 'Dev'
