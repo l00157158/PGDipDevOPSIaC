@@ -4,7 +4,7 @@ import os
 
 def read_config_from_yaml(file_path):
     
-    print(f"File path trying to reach: {file_path}")
+    print(f"Yaml File path trying to reach: {file_path}")
     
     try:
         with open(file_path, 'r') as file:
@@ -21,8 +21,9 @@ def read_config_from_yaml(file_path):
 def ec2_demo():
   
     # Read the entire config from the YAML file
+  
     config = read_config_from_yaml(r'c:\Users\pc\PGDIP\IaC\EC2-config.yaml')
-
+    
     # Check if the config is loaded correctly
     if config is None:
         print("Configuration is empty, exiting.")
