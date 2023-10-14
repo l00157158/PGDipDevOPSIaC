@@ -48,4 +48,4 @@ def ec2_demo():
 
 if __name__ == '__main__':
     ec2_demo()
-    print("Created?")
+    print("Created")
