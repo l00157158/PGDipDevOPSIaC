@@ -1,3 +1,17 @@
+Description: CloudFormation to create an EC2 Instance with Apache and PHP. Also MySQL
+
+Parameters: 
+  EC2InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+      # Add other instance types as needed
+    ConstraintDescription: must be a valid EC2 instance type.
+
 Resources:
 
   # Define security group -> SSH and HTTP/HTTPS
@@ -33,7 +47,7 @@ Resources:
   L00157158EC2Lab1:
     Type: AWS::EC2::Instance
     Properties:
-      InstanceType: t2.micro
+      InstanceType: !Ref EC2InstanceType
       ImageId: "ami-0ea0f26a6d50850c5"
       KeyName: L00157158-IAC-keypair-ie
       Tags:
@@ -72,9 +86,15 @@ Outputs:
     Value: !Ref L00157158EC2Lab1
     Export:
       Name: ATUEC2DemoVal
-  SecurityGroupID:
+  SSHSecurityGroupID:
     Description: The ID of the security group
     Value: !Ref SSHSecurityGroup
+  MySQLSecurityGroup:
+    Description: The ID of the SQL security group
+    Value: !Ref MySQLSecurityGroup    
   MySQLDBEndpoint:
     Description: Endpoint of the MySQL DB
-    Value: !GetAtt MySQLDB, Endpoint.Address
+    Value: !GetAtt MySQLDB.Endpoint.Address
+  WebsiteURL:
+    Description: URL of the website
+    Value: !Sub "http://${L00157158EC2Lab1.PublicDnsName}/"
