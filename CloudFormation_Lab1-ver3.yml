@@ -1,0 +1,61 @@
+Resources:
+
+  # Define the security group for SSH
+  SSHSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0  # allows SSH from any IP.
+
+  # Define the security group for MySQL
+  MySQLSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow MySQL access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          SourceSecurityGroupId: !GetAtt [SSHSecurityGroup, GroupId]
+
+  ATUec2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: "ami-0ea0f26a6d50850c5"
+      Tags:
+        - Key: "Name"
+          Value: "IAC-EC2-LAB-1"
+        - Key: "Purpose"
+          Value: "PGDIP-IAC"
+      SecurityGroups:
+        - !Ref SSHSecurityGroup
+
+  # MySQL RDS instance
+  MySQLDB:
+    Type: "AWS::RDS::DBInstance"
+    Properties:
+      Engine: "mysql"
+      MasterUsername: "admin"  # You should customize this and avoid hardcoding credentials
+      MasterUserPassword: "password"  # Customize and avoid hardcoding
+      DBInstanceClass: "db.t2.micro"
+      AllocatedStorage: "20"  # In GB
+      VPCSecurityGroups:
+        - !GetAtt [MySQLSecurityGroup, GroupId]
+
+Outputs:
+  OutLab1Demo:
+    Description: EC2 Instance
+    Value: !Ref ATUec2
+    Export:
+      Name: ATUEC2DemoVal
+  SecurityGroupID:
+    Description: The ID of the security group
+    Value: !Ref SSHSecurityGroup
+  MySQLDBEndpoint:
+    Description: Endpoint of the MySQL DB
+    Value: !GetAtt [MySQLDB, Endpoint.Address]

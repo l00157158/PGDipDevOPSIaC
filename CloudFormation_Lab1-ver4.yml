@@ -1,0 +1,80 @@
+Resources:
+
+  # Define security group -> SSH and HTTP/HTTPS
+  SSHSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH and HTTP/HTTPS access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0  # allows SSH from any IP.
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0  # allows HTTP from any IP.
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: 0.0.0.0/0  # allows HTTPS from any IP.
+
+  # Define the security group for MySQL
+  MySQLSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow MySQL access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          SourceSecurityGroupId: !GetAtt [SSHSecurityGroup, GroupId]
+
+  L00157158EC2Lab1:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: "ami-0ea0f26a6d50850c5"
+      KeyName: L00157158-IAC-keypair-ie
+      Tags:
+        - Key: "Name"
+          Value: "IAC-EC2-LAB-1"
+        - Key: "Purpose"
+          Value: "PGDIP-IAC"
+      SecurityGroups:
+        - !Ref SSHSecurityGroup
+      UserData: 
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo yum update -y
+          sudo yum install -y mysql httpd php php-mysqlnd
+          sleep 20
+          sudo systemctl start httpd
+          sudo systemctl enable httpd
+          echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/phpinfo.php
+          # to demonstrate PHP is working 
+
+  # MySQL RDS instance
+  MySQLDB:
+    Type: "AWS::RDS::DBInstance"
+    Properties:
+      Engine: "mysql"
+      MasterUsername: "admin"
+      MasterUserPassword: "password"
+      DBInstanceClass: "db.t2.micro"
+      AllocatedStorage: "20"
+      VPCSecurityGroups:
+        - !GetAtt [MySQLSecurityGroup, GroupId]
+
+Outputs:
+  OutLab1Demo:
+    Description: EC2 Instance
+    Value: !Ref L00157158EC2Lab1
+    Export:
+      Name: ATUEC2DemoVal
+  SecurityGroupID:
+    Description: The ID of the security group
+    Value: !Ref SSHSecurityGroup
+  MySQLDBEndpoint:
+    Description: Endpoint of the MySQL DB
+    Value: !GetAtt [MySQLDB, Endpoint.Address]

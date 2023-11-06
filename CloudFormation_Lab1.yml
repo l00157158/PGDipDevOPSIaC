@@ -1,0 +1,18 @@
+Resources:
+  ATUec2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: "ami-0ea0f26a6d50850c5"
+      Tags:
+        - Key: "Name"
+          Value: "IAC-EC2-LAB-1"
+        - Key: "Purpose"
+          Value: "PGDIP-IAC"
+Outputs:
+  OutLab1Demo:
+    # name of outputs, values refs the resourc;export the field
+    Description: EC2 Instance
+    Value: !Ref ATUec2
+    Export:
+      Name: ATUEC2DemoVal
