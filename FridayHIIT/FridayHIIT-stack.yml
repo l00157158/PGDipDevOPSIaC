@@ -54,7 +54,7 @@ Resources:
     Properties:
       AvailabilityZone: !Ref AvailabilityZone
       VpcId: !Ref FHIITVPC
-      CidrBlock: 192.168.0.0/26
+      CidrBlock: 192.168.0.0/27
       Tags:
         - Key: Project
           Value: FHIIT
@@ -81,7 +81,16 @@ Resources:
     Properties:
       AvailabilityZone: !Ref AvailabilityZone
       VpcId: !Ref FHIITVPC
-      CidrBlock: 192.168.0.64/26
+      CidrBlock: 192.168.0.64/27
+      Tags:
+        - Key: Project
+          Value: FHIIT
+  FHIITPvtSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Select [1, !GetAZs '']
+      VpcId: !Ref FHIITVPC
+      CidrBlock: 192.168.0.128/27
       Tags:
         - Key: Project
           Value: FHIIT
@@ -143,6 +152,7 @@ Resources:
       DBSubnetGroupDescription: Looks like a DB Subnet group is also required for RDS!
       SubnetIds:
         - !Ref FHIITPvtSubnet
+        - !Ref FHIITPvtSubnet2
       Tags:
         - Key: Project
           Value: FHIIT        
@@ -170,8 +180,9 @@ Resources:
           Value: FHIIT
         - Key: Name 
           Value:  FHIITAppInstance   
+
   # MySQL RDS instance
-  MySQLDB:
+  FHIITMySQLDB:
     Type: "AWS::RDS::DBInstance"
     Properties:
       Engine: "mysql"
