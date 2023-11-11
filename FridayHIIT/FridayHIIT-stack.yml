@@ -33,33 +33,33 @@ Parameters:
       - eu-west-1b
       - eu-west-1c
 Resources:
-  FridayHIITVPC:
+  FHIITVPC:
     Type: 'AWS::EC2::VPC'
     Properties:
       CidrBlock: 192.168.0.0/25
       EnableDnsSupport: true
       Tags:
         - Key: Project
-          Value: FridayHIIT
-  FridayHIITPubSubnet:
+          Value: FHIIT
+  FHIITPubSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
       AvailabilityZone: !Ref AvailabilityZone
-      VpcId: !Ref FridayHIITVPC
+      VpcId: !Ref FHIITVPC
       CidrBlock: 192.168.0.0/26
       Tags:
         - Key: Project
-          Value: FridayHIIT
+          Value: FHIIT
         - Key: Name
-          Value: FridayHIITPubSubnet  
-  FridayHIITJumpBox:
+          Value: FHIITPubSubnet  
+  FHIITJumpBox:
     Type: AWS::EC2::Instance
     Properties:
       KeyName: !Ref KeyName
       AvailabilityZone: !Ref AvailabilityZone
       ImageId:  !Ref ImageID 
       InstanceType: !Ref InstanceType
-      SubnetId: !Ref FridayHIITPubSubnet
+      SubnetId: !Ref FHIITPubSubnet
       SecurityGroupIds:
         - !Ref FHIITSubNetPubSecurityGroup
       UserData: !Base64 |
@@ -67,24 +67,24 @@ Resources:
         # put your script here
       Tags:
         - Key: Project
-          Value: FridayHIIT
+          Value: FHIIT
         - Key: Name 
-          Value: FridayHIITJumpBox
-  FridayHITTPvtSubnet:
+          Value: FHIITJumpBox
+  FHIITPvtSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
       AvailabilityZone: !Ref AvailabilityZone
-      VpcId: !Ref FridayHIITVPC
+      VpcId: !Ref FHIITVPC
       CidrBlock: 192.168.0.64/26
       Tags:
         - Key: Project
-          Value: FridayHIIT
+          Value: FHIIT
   FHIITSubNetPubSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupName: FHIITSubNetPubSecurityGroup
       GroupDescription: Security Group for Public Subnet
-      VpcId: !Ref FridayHIITVPC
+      VpcId: !Ref FHIITVPC
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 443
@@ -104,7 +104,7 @@ Resources:
     Properties:
       GroupName: FHIITSubNetPvtSecurityGroup
       GroupDescription: Security Group for Private Subnet
-      VpcId: !Ref FridayHIITVPC
+      VpcId: !Ref FHIITVPC
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 443
@@ -120,9 +120,9 @@ Resources:
         - Key: Purpose
           Value: Private Subnet Security Group
         - Key: Project
-          Value: FridayHIIT
+          Value: FHIIT
   # Define the security group for MySQL
-  MySQLSecurityGroup:
+  FHIITMySQLSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Allow MySQL access
@@ -131,14 +131,23 @@ Resources:
           FromPort: '3306'
           ToPort: '3306'
           SourceSecurityGroupId: !GetAtt FHIITSubNetPvtSecurityGroup.GroupId
-  FridayHIITAppInstance:
+  FHIITMySQLSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Looks like a DB Subnet group is also required for RDS!
+      SubnetIds:
+        - !Ref FHIITPvtSubnet
+    Tags:
+      - Key: keyname
+        Value: value        
+  FHIITAppInstance:
     Type: AWS::EC2::Instance
     Properties:
       KeyName: !Ref KeyName
       AvailabilityZone: !Ref AvailabilityZone
       ImageId:  !Ref ImageID 
       InstanceType: !Ref InstanceType
-      SubnetId: !Ref FridayHITTPvtSubnet
+      SubnetId: !Ref FHIITPvtSubnet
       SecurityGroupIds:
         - !Ref FHIITSubNetPvtSecurityGroup
       UserData: !Base64 |
@@ -146,17 +155,29 @@ Resources:
         # put your script here
       Tags:
         - Key: Project
-          Value: FridayHIIT
+          Value: FHIIT
         - Key: Name 
-          Value:  FridayHIITAppInstance   
-  FridayHIITigw:
+          Value:  FHIITAppInstance   
+  # MySQL RDS instance
+  MySQLDB:
+    Type: "AWS::RDS::DBInstance"
+    Properties:
+      Engine: "mysql"
+      MasterUsername: "admin"
+      MasterUserPassword: !Ref DBPassword
+      DBInstanceClass: "db.t2.micro"
+      AllocatedStorage: "20"
+      DBSubnetGroupName: !Ref FHIITMySQLSubnetGroup
+      VPCSecurityGroups:
+        - !GetAtt FHIITMySQLSecurityGroup.GroupId
+  FHIITigw:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
       Tags:
         - Key: Project
-          Value: FridayHIIT
+          Value: FHIIT
   AttachGateway:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
-      VpcId: !Ref FridayHIITVPC
-      InternetGatewayId: !Ref FridayHIITigw
+      VpcId: !Ref FHIITVPC
+      InternetGatewayId: !Ref FHIITigw
