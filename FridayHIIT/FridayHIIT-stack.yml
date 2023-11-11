@@ -54,7 +54,7 @@ Resources:
     Properties:
       AvailabilityZone: !Ref AvailabilityZone
       VpcId: !Ref FHIITVPC
-      CidrBlock: 192.168.0.0/27
+      CidrBlock: 192.168.0.64/27
       Tags:
         - Key: Project
           Value: FHIIT
@@ -81,7 +81,7 @@ Resources:
     Properties:
       AvailabilityZone: !Ref AvailabilityZone
       VpcId: !Ref FHIITVPC
-      CidrBlock: 192.168.0.64/27
+      CidrBlock: 192.168.0.32/27
       Tags:
         - Key: Project
           Value: FHIIT
@@ -90,7 +90,7 @@ Resources:
     Properties:
       AvailabilityZone: !Select [1, !GetAZs '']
       VpcId: !Ref FHIITVPC
-      CidrBlock: 192.168.0.128/27
+      CidrBlock: 192.168.0.32/27
       Tags:
         - Key: Project
           Value: FHIIT
