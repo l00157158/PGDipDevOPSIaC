@@ -71,8 +71,6 @@ Resources:
         SubnetId: !Ref FHIITPubSubnet
         GroupSet:
           - !Ref FHIITSubNetPubSecurityGroup
-      SecurityGroupIds:
-        - !Ref FHIITSubNetPubSecurityGroup
       UserData: !Base64 |
         #!/bin/bash -ex
         # put your script here
