@@ -50,8 +50,6 @@ Resources:
       Tags:
         - Key: Project
           Value: FHIIT
-        - Key: Name
-          Value: FHIITPubSubnet  
   FHIITJumpBox:
     Type: AWS::EC2::Instance
     Properties:
@@ -137,9 +135,9 @@ Resources:
       DBSubnetGroupDescription: Looks like a DB Subnet group is also required for RDS!
       SubnetIds:
         - !Ref FHIITPvtSubnet
-    Tags:
-      - Key: keyname
-        Value: value        
+      Tags:
+        - Key: Project
+          Value: FHIIT        
   FHIITAppInstance:
     Type: AWS::EC2::Instance
     Properties:
