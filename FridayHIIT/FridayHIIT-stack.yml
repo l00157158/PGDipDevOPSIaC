@@ -152,7 +152,13 @@ Resources:
         - !Ref FHIITSubNetPvtSecurityGroup
       UserData: !Base64 |
         #!/bin/bash -ex
-        # put your script here
+        sudo yum update -y
+        sudo yum install -y mysql httpd php php-mysqlnd
+        sleep 20
+        sudo systemctl start httpd
+        sudo systemctl enable httpd
+        echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/phpinfo.php
+        # I am installing mysql client to demonstrate connection to the RDS instance
       Tags:
         - Key: Project
           Value: FHIIT
