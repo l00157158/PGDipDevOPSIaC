@@ -226,8 +226,8 @@ Resources:
           Value: HIITPublicRouteTable
         - Key: Project
           Value: FHIIT
-          
-  PublicRoute:
+
+  FHIITPublicRoute:
     Type: AWS::EC2::Route
     DependsOn: FHIITAttachGateway
     Properties:
