@@ -211,8 +211,33 @@ Resources:
       Tags:
         - Key: Project
           Value: FHIIT
-  AttachGateway:
+  FHIITAttachGateway:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
       VpcId: !Ref FHIITVPC
       InternetGatewayId: !Ref FHIITigw
+
+  FHIITPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref FHIITVPC
+      Tags:
+        - Key: Name 
+          Value: HIITPublicRouteTable
+        - Key: Project
+          Value: FHIIT
+          
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: FHIITAttachGateway
+    Properties:
+      RouteTableId: !Ref FHIITPublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref FHIITigw
+
+  FHIITPubSubnetRouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref FHIITPubSubnet
+      RouteTableId: !Ref FHIITPublicRouteTable
+  
