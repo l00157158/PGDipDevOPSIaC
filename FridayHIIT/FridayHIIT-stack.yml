@@ -121,6 +121,16 @@ Resources:
           Value: Private Subnet Security Group
         - Key: Project
           Value: FridayHIIT
+  # Define the security group for MySQL
+  MySQLSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow MySQL access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          SourceSecurityGroupId: !GetAtt FHIITSubNetPvtSecurityGroup.GroupId
   FridayHIITAppInstance:
     Type: AWS::EC2::Instance
     Properties:
