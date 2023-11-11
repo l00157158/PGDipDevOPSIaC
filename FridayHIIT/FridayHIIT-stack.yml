@@ -76,12 +76,12 @@ Resources:
           Value: FHIIT
         - Key: Name 
           Value: FHIITJumpBox
-  FHIITPvtSubnet:
+  FHIITPvtSubnet1:
     Type: 'AWS::EC2::Subnet'
     Properties:
       AvailabilityZone: !Ref AvailabilityZone
       VpcId: !Ref FHIITVPC
-      CidrBlock: 192.168.0.32/27
+      CidrBlock: 192.168.0.0/27
       Tags:
         - Key: Project
           Value: FHIIT
@@ -151,7 +151,7 @@ Resources:
     Properties:
       DBSubnetGroupDescription: Looks like a DB Subnet group is also required for RDS!
       SubnetIds:
-        - !Ref FHIITPvtSubnet
+        - !Ref FHIITPvtSubnet1
         - !Ref FHIITPvtSubnet2
       Tags:
         - Key: Project
@@ -163,7 +163,7 @@ Resources:
       AvailabilityZone: !Ref AvailabilityZone
       ImageId:  !Ref ImageID 
       InstanceType: !Ref InstanceType
-      SubnetId: !Ref FHIITPvtSubnet
+      SubnetId: !Ref FHIITPvtSubnet1
       SecurityGroupIds:
         - !Ref FHIITSubNetPvtSecurityGroup
       UserData: !Base64 |
