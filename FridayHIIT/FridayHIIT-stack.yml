@@ -32,6 +32,14 @@ Parameters:
       - eu-west-1a
       - eu-west-1b
       - eu-west-1c
+  DBPassword:
+    Description: The database admin password
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    MaxLength: 41
+    AllowedPattern: '[a-zA-Z0-9]*'
+    ConstraintDescription: Must contain only alphanumeric characters, and be 8 to 41 characters in length.    
 Resources:
   FHIITVPC:
     Type: 'AWS::EC2::VPC'
