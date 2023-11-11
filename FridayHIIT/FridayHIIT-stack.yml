@@ -66,6 +66,10 @@ Resources:
       ImageId:  !Ref ImageID 
       InstanceType: !Ref InstanceType
       SubnetId: !Ref FHIITPubSubnet
+      NetworkInterfaces:
+      - DeviceIndex: "0"
+        AssociatePublicIpAddress: true
+        SubnetId: !Ref FHIITPubSubnet
       SecurityGroupIds:
         - !Ref FHIITSubNetPubSecurityGroup
       UserData: !Base64 |
@@ -106,6 +110,10 @@ Resources:
           ToPort: 443
           CidrIp: 0.0.0.0/0
           Description: HTTPS access from anywhere
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0  # allows SSH from anywhere from Internet (for testing purpose).
         - IpProtocol: icmp
           FromPort: -1
           ToPort: -1
