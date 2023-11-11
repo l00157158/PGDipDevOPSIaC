@@ -49,6 +49,14 @@ Resources:
       Tags:
         - Key: Project
           Value: FHIIT
+
+
+  FHIITElasticIP:
+    Type: "AWS::EC2::EIP"
+    Properties:
+      Domain: "vpc"
+
+
   FHIITPubSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -58,6 +66,16 @@ Resources:
       Tags:
         - Key: Project
           Value: FHIIT
+
+  FHIITNATGateway:
+    Type: "AWS::EC2::NatGateway"
+    Properties:
+      AllocationId: !GetAtt ElasticIP.AllocationId
+      SubnetId: !Ref FHIITPubSubnet
+      Tags:
+        - Key: Name
+          Value: "FHIITNATGateway"
+
   FHIITJumpBox:
     Type: AWS::EC2::Instance
     Properties:
@@ -226,6 +244,36 @@ Resources:
           Value: HIITPublicRouteTable
         - Key: Project
           Value: FHIIT
+
+  FHIITPvtRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref FHIITVPC
+      Tags:
+        - Key: Name 
+          Value: HIITPrivateRouteTable
+        - Key: Project
+          Value: FHIIT
+
+  FHIITPrivateRoute:
+    Type: "AWS::EC2::Route"
+    Properties:
+      RouteTableId: !Ref FHIITPvtRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: !Ref FHIITNATGateway
+
+  FHIITPvtSubnet1RouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref FHIITPvtSubnet1
+      RouteTableId: !Ref PrivateRouteTable
+
+  FHIITPvtSubnet2RouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref FHIITPvtSubnet2
+      RouteTableId: !Ref PrivateRouteTable
+    
 
   FHIITPublicRoute:
     Type: AWS::EC2::Route
