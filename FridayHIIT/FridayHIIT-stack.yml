@@ -186,6 +186,73 @@ Resources:
       Tags:
         - Key: Project
           Value: FHIIT        
+
+  FHIITigw:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Project
+          Value: FHIIT
+  FHIITAttachGateway:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref FHIITVPC
+      InternetGatewayId: !Ref FHIITigw
+
+  FHIITPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref FHIITVPC
+      Tags:
+        - Key: Name 
+          Value: FHIITPublicRouteTable
+        - Key: Project
+          Value: FHIIT
+
+  FHIITPvtRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref FHIITVPC
+      Tags:
+        - Key: Name 
+          Value: FHIITPrivateRouteTable
+        - Key: Project
+          Value: FHIIT
+
+  FHIITPrivateRoute:
+    Type: "AWS::EC2::Route"
+    Properties:
+      RouteTableId: !Ref FHIITPvtRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: !Ref FHIITNATGateway
+
+  FHIITPvtSubnet1RouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref FHIITPvtSubnet1
+      RouteTableId: !Ref FHIITPvtRouteTable
+
+  FHIITPvtSubnet2RouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref FHIITPvtSubnet2
+      RouteTableId: !Ref FHIITPvtRouteTable
+    
+
+  FHIITPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: FHIITAttachGateway
+    Properties:
+      RouteTableId: !Ref FHIITPublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref FHIITigw
+
+  FHIITPubSubnetRouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref FHIITPubSubnet
+      RouteTableId: !Ref FHIITPublicRouteTable
+
   FHIITAppInstance:
     Type: AWS::EC2::Instance
     Properties:
@@ -222,70 +289,5 @@ Resources:
       AllocatedStorage: "20"
       DBSubnetGroupName: !Ref FHIITMySQLSubnetGroup
       VPCSecurityGroups:
-        - !GetAtt FHIITMySQLSecurityGroup.GroupId
-  FHIITigw:
-    Type: 'AWS::EC2::InternetGateway'
-    Properties:
-      Tags:
-        - Key: Project
-          Value: FHIIT
-  FHIITAttachGateway:
-    Type: 'AWS::EC2::VPCGatewayAttachment'
-    Properties:
-      VpcId: !Ref FHIITVPC
-      InternetGatewayId: !Ref FHIITigw
-
-  FHIITPublicRouteTable:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref FHIITVPC
-      Tags:
-        - Key: Name 
-          Value: HIITPublicRouteTable
-        - Key: Project
-          Value: FHIIT
-
-  FHIITPvtRouteTable:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref FHIITVPC
-      Tags:
-        - Key: Name 
-          Value: HIITPrivateRouteTable
-        - Key: Project
-          Value: FHIIT
-
-  FHIITPrivateRoute:
-    Type: "AWS::EC2::Route"
-    Properties:
-      RouteTableId: !Ref FHIITPvtRouteTable
-      DestinationCidrBlock: "0.0.0.0/0"
-      NatGatewayId: !Ref FHIITNATGateway
-
-  FHIITPvtSubnet1RouteTableAssociation:
-    Type: "AWS::EC2::SubnetRouteTableAssociation"
-    Properties:
-      SubnetId: !Ref FHIITPvtSubnet1
-      RouteTableId: !Ref PrivateRouteTable
-
-  FHIITPvtSubnet2RouteTableAssociation:
-    Type: "AWS::EC2::SubnetRouteTableAssociation"
-    Properties:
-      SubnetId: !Ref FHIITPvtSubnet2
-      RouteTableId: !Ref PrivateRouteTable
-    
-
-  FHIITPublicRoute:
-    Type: AWS::EC2::Route
-    DependsOn: FHIITAttachGateway
-    Properties:
-      RouteTableId: !Ref FHIITPublicRouteTable
-      DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref FHIITigw
-
-  FHIITPubSubnetRouteTableAssociation:
-    Type: 'AWS::EC2::SubnetRouteTableAssociation'
-    Properties:
-      SubnetId: !Ref FHIITPubSubnet
-      RouteTableId: !Ref FHIITPublicRouteTable
+        - !GetAtt FHIITMySQLSecurityGroup.GroupId    
   
