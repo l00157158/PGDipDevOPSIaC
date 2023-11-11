@@ -65,10 +65,12 @@ Resources:
       AvailabilityZone: !Ref AvailabilityZone
       ImageId:  !Ref ImageID 
       InstanceType: !Ref InstanceType
-      SubnetId: !Ref FHIITPubSubnet
       NetworkInterfaces:
       - DeviceIndex: "0"
         AssociatePublicIpAddress: true
+        SubnetId: !Ref FHIITPubSubnet
+        GroupSet:
+          - !Ref FHIITSubNetPubSecurityGroup
       SecurityGroupIds:
         - !Ref FHIITSubNetPubSecurityGroup
       UserData: !Base64 |
