@@ -70,7 +70,7 @@ Resources:
   FHIITNATGateway:
     Type: "AWS::EC2::NatGateway"
     Properties:
-      AllocationId: !GetAtt ElasticIP.AllocationId
+      AllocationId: !GetAtt FHIITElasticIP.AllocationId
       SubnetId: !Ref FHIITPubSubnet
       Tags:
         - Key: Name
