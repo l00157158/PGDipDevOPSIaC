@@ -24,7 +24,7 @@ Parameters:
       - t2.micro
       - t2.small
 
-AvailabilityZone:
+  AvailabilityZone:
     Type: String
     Default: eu-west-1a
     Description: The Availability Zone
@@ -50,13 +50,16 @@ Resources:
       Tags:
         - Key: Project
           Value: FridayHIIT
+        - Key: Name
+          Value: FridayHIITPubSubnet  
   FridayHIITJumpBox:
     Type: AWS::EC2::Instance
     Properties:
       KeyName: !Ref KeyName
       AvailabilityZone: !Ref AvailabilityZone
-      ImageId:  !Ref KeyName 
+      ImageId:  !Ref ImageID 
       InstanceType: !Ref InstanceType
+      SubnetId: !Ref FridayHIITPubSubnet
       SecurityGroupIds:
         - !Ref FHIITSubNetPubSecurityGroup
       UserData: !Base64 |
@@ -65,6 +68,8 @@ Resources:
       Tags:
         - Key: Project
           Value: FridayHIIT
+        - Key: Name 
+          Value: FridayHIITJumpBox
   FridayHITTPvtSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -116,6 +121,24 @@ Resources:
           Value: Private Subnet Security Group
         - Key: Project
           Value: FridayHIIT
+  FridayHIITAppInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref KeyName
+      AvailabilityZone: !Ref AvailabilityZone
+      ImageId:  !Ref ImageID 
+      InstanceType: !Ref InstanceType
+      SubnetId: !Ref FridayHITTPvtSubnet
+      SecurityGroupIds:
+        - !Ref FHIITSubNetPvtSecurityGroup
+      UserData: !Base64 |
+        #!/bin/bash -ex
+        # put your script here
+      Tags:
+        - Key: Project
+          Value: FridayHIIT
+        - Key: Name 
+          Value:  FridayHIITAppInstance   
   FridayHIITigw:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
