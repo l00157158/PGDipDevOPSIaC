@@ -141,6 +141,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Allow MySQL access
+      VpcId: !Ref FHIITVPC
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: '3306'
