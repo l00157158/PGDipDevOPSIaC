@@ -1,78 +1,37 @@
 AWSTemplateFormatVersion: 2010-09-09
-Metadata:
-  'AWS::CloudFormation::Designer':
-    466dbef1-711b-4be0-ae85-d1d14e19295e:
-      size:
-        width: 1780
-        height: 710
-      position:
-        x: -270
-        'y': -20
-      z: 1
-      embeds:
-        - 23b45cda-26ac-457b-a20c-f51cb493367c
-        - 86e96a32-4f6c-409a-84d8-eb90822b6943
-    86e96a32-4f6c-409a-84d8-eb90822b6943:
-      size:
-        width: 530
-        height: 400
-      position:
-        x: -160
-        'y': 40
-      z: 2
-      parent: 466dbef1-711b-4be0-ae85-d1d14e19295e
-      embeds:
-        - e60e4a82-7818-403a-a429-75cfccf7064e
-    23b45cda-26ac-457b-a20c-f51cb493367c:
-      size:
-        width: 370
-        height: 370
-      position:
-        x: 820
-        'y': 50
-      z: 2
-      parent: 466dbef1-711b-4be0-ae85-d1d14e19295e
-      embeds:
-        - 25cad792-02f2-4935-9e4a-a4dbcc30437c
-    e60e4a82-7818-403a-a429-75cfccf7064e:
-      size:
-        width: 60
-        height: 60
-      position:
-        x: -39.45500320243659
-        'y': 71.78608445623205
-      z: 3
-      parent: 86e96a32-4f6c-409a-84d8-eb90822b6943
-      embeds: []
-      iscontainedinside:
-        - 466dbef1-711b-4be0-ae85-d1d14e19295e
-    25cad792-02f2-4935-9e4a-a4dbcc30437c:
-      size:
-        width: 60
-        height: 60
-      position:
-        x: 895.901870806128
-        'y': 109.36677345994629
-      z: 3
-      parent: 23b45cda-26ac-457b-a20c-f51cb493367c
-      embeds: []
-      iscontainedinside:
-        - 466dbef1-711b-4be0-ae85-d1d14e19295e
-    a4669127-705f-4cde-b5aa-bc972a157120:
-      size:
-        width: 60
-        height: 60
-      position:
-        x: 400.00216622940695
-        'y': -194.19188475060596
-      z: 0
-      embeds: []
-    9f1d22ac-955d-40bf-969c-3f5b633af8bf:
-      source:
-        id: a4669127-705f-4cde-b5aa-bc972a157120
-      target:
-        id: 466dbef1-711b-4be0-ae85-d1d14e19295e
-      z: 0
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: String
+    Default: L00157158-IAC-keypair-ie
+    AllowedValues:
+      - l00157158_key_pair
+      - l00157158_key_pair_02
+      - L00157158-IAC-keypair-ie
+
+  ImageID:
+    Description: The AMI ID for the instance
+    Type: String
+    Default: ami-0db5ca3e5748fb7e2
+    AllowedValues:
+      - ami-0db5ca3e5748fb7e2
+
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.small
+    AllowedValues:
+      - t2.micro
+      - t2.small
+
+AvailabilityZone:
+    Type: String
+    Default: eu-west-1a
+    Description: The Availability Zone
+    AllowedValues:
+      - eu-west-1a
+      - eu-west-1b
+      - eu-west-1c
 Resources:
   FridayHIITVPC:
     Type: 'AWS::EC2::VPC'
@@ -82,33 +41,39 @@ Resources:
       Tags:
         - Key: Project
           Value: FridayHIIT
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 466dbef1-711b-4be0-ae85-d1d14e19295e
   FridayHIITPubSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
-      AvailabilityZone: zone-id
+      AvailabilityZone: !Ref AvailabilityZone
       VpcId: !Ref FridayHIITVPC
       CidrBlock: 192.168.0.0/26
       Tags:
         - Key: Project
           Value: FridayHIIT
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 86e96a32-4f6c-409a-84d8-eb90822b6943
+  FridayHIITJumpBox:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref KeyName
+      AvailabilityZone: !Ref AvailabilityZone
+      ImageId:  !Ref KeyName 
+      InstanceType: !Ref InstanceType
+      SecurityGroupIds:
+        - !Ref FHIITSubNetPubSecurityGroup
+      UserData: !Base64 |
+        #!/bin/bash -ex
+        # put your script here
+      Tags:
+        - Key: Project
+          Value: FridayHIIT
   FridayHITTPvtSubnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
-      AvailabilityZone: zone-id
+      AvailabilityZone: !Ref AvailabilityZone
       VpcId: !Ref FridayHIITVPC
       CidrBlock: 192.168.0.64/26
       Tags:
         - Key: Project
           Value: FridayHIIT
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 23b45cda-26ac-457b-a20c-f51cb493367c
   FHIITSubNetPubSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -129,9 +94,6 @@ Resources:
       Tags:
         - Key: Purpose
           Value: Public Subnet Security Group
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: e60e4a82-7818-403a-a429-75cfccf7064e
   FHIITSubNetPvtSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -154,23 +116,14 @@ Resources:
           Value: Private Subnet Security Group
         - Key: Project
           Value: FridayHIIT
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 25cad792-02f2-4935-9e4a-a4dbcc30437c
   FridayHIITigw:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
       Tags:
         - Key: Project
           Value: FridayHIIT
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: a4669127-705f-4cde-b5aa-bc972a157120
   AttachGateway:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
       VpcId: !Ref FridayHIITVPC
       InternetGatewayId: !Ref FridayHIITigw
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 9f1d22ac-955d-40bf-969c-3f5b633af8bf
