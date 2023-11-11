@@ -126,11 +126,15 @@ Resources:
           ToPort: 443
           CidrIp: 192.168.0.0/26
           Description: HTTPS access from IP address within Private subnet
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 192.168.0.0/25  # allows SSH from any IP within the VPC.
         - IpProtocol: icmp
           FromPort: -1
           ToPort: -1
-          CidrIp: 192.168.0.0/26
-          Description: Allow ping requests from IP address within Private subnet
+          CidrIp: 192.168.0.0/25
+          Description: Allow ping requests from IP address within the VPC
       Tags:
         - Key: Purpose
           Value: Private Subnet Security Group
