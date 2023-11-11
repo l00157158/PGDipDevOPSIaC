@@ -69,7 +69,6 @@ Resources:
       NetworkInterfaces:
       - DeviceIndex: "0"
         AssociatePublicIpAddress: true
-        SubnetId: !Ref FHIITPubSubnet
       SecurityGroupIds:
         - !Ref FHIITSubNetPubSecurityGroup
       UserData: !Base64 |
