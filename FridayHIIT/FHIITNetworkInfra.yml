@@ -133,60 +133,42 @@ Outputs:
   VPCId:
     Description: "the VPAC ID"
     Value: !Ref FHIITVPC
-
   ElasticIP:
     Description: "The Elastic IP ID"
     Vlaue:  !Ref FHIITElasticIP
   PubSubnetID: 
     Description: "The public Subnet id"  
     Value: !Ref FHIITPubSubnet  
-  
-  PvtSubNet1ID: 
-    Description: "The Private Subnet id"
-    Value: !Ref FHIITPvtSubnet1
-  
   PvtSubNet2ID: 
     Description: "The Private Subnet id"
     Value: !Ref FHIITPvtSubnet2
-
   SQLSubnetID:
     Description: "The MySQL subnet group ID"
     Value: !Ref FHIITMySQLSubnetGroup
-
   InternetGatewayId:
      Description: "The Internet Gatway ID" 
      Value: !Ref FHIITigw
-
   AttachGateWayID:
     Description: "AttachGateway ID"
     Value: !Ref FHIITAttachGateway
-  
   PublicRouteTableID:
     Description: "Public Route table ID"
     Value: !Ref FHIITPublicRouteTable
-  
   PrivateRouteTableID:
     Description: "Private Route Table ID"
     Value: !Ref FFHIITPvtRouteTable
-
   PrivateRouteId:
     Description: "The Private Route ID"
     Value: !Ref FHIITPrivateRoute
-
   PvtSubnet1RouteTableAssociationID:
     Description: " private subnet1 Route Table association ID"
     Value: !Ref FHIITPvtSubnet1RouteTableAssociation
-
   PvtSubnet21RouteTableAssociationID:
     Description: " private subnet1 Route Table association ID"
     Value: !Ref FHIITPvtSubnet2RouteTableAssociation    
-
   PublictRouteID:
     Description: "The Public Route ID"
     Value: !Ref FHIITPublicRoute
-
   PubSubnetRouteTableAssociationID:
     Description: "The public subnet Route table association Id"
     Value: !Ref FHIITPubSubnetRouteTableAssociation
-
-  

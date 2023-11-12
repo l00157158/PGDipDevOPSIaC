@@ -40,8 +40,6 @@ Outputs:
     Value: !GetAtt FHIIT-Network-Infra.Outputs.ElasticIP
   PubSubnetID:
     Value: !GetAtt FHIIT-Network-Infra.Outputs.PubSubnetID
-  PvtSubNet1ID: 
-   Value: !GetAtt FHIIT-Network-Infra.Outputs.PvtSubNet1ID
   PvtSubNet2ID: 
     Value: !GetAtt FHIIT-Network-Infra.Outputs.PvtSubNet2ID
   SQLSubnetID:
