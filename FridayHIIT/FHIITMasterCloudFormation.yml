@@ -7,7 +7,7 @@ Resources:
     Properties:
       TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIITParameters.yml
 
-  NFHIITNetworkInfra:
+  FHIITNetworkInfra:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIITNetworkInfra.yml

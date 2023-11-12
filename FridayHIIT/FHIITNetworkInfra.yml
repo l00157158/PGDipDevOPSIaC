@@ -135,7 +135,7 @@ Outputs:
     Value: !Ref FHIITVPC
   ElasticIP:
     Description: "The Elastic IP ID"
-    Vlaue:  !Ref FHIITElasticIP
+    Value:  !Ref FHIITElasticIP
   PubSubnetID: 
     Description: "The public Subnet id"  
     Value: !Ref FHIITPubSubnet  
