@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description:  Resource definitions for EC2 security Groups
+Resources:
+  FHIITSubNetPubSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupName: FHIITSubNetPubSecurityGroup
+      GroupDescription: Security Group for Public Subnet
+      VpcId: !Ref FHIITVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: HTTPS access from anywhere
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0  # allows SSH from anywhere from Internet (for testing purpose).
+        - IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+          Description: Allow ping requests
+      Tags:
+        - Key: Purpose
+          Value: Public Subnet Security Group
+  FHIITSubNetPvtSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupName: FHIITSubNetPvtSecurityGroup
+      GroupDescription: Security Group for Private Subnet
+      VpcId: !Ref FHIITVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 192.168.0.0/26
+          Description: HTTPS access from IP address within Private subnet
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 192.168.0.0/25  # allows SSH from any IP within the VPC.
+        - IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 192.168.0.0/25
+          Description: Allow ping requests from IP address within the VPC
+      Tags:
+        - Key: Purpose
+          Value: Private Subnet Security Group
+        - Key: Project
+          Value: FHIIT

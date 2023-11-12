@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: String
+    Default: L00157158-IAC-keypair-ie
+    AllowedValues:
+      - l00157158_key_pair
+      - l00157158_key_pair_02
+      - L00157158-IAC-keypair-ie
+
+  ImageID:
+    Description: The AMI ID for the instance
+    Type: String
+    Default: ami-0db5ca3e5748fb7e2
+    AllowedValues:
+      - ami-0db5ca3e5748fb7e2
+
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.small
+    AllowedValues:
+      - t2.micro
+      - t2.small
+
+  AvailabilityZone:
+    Type: String
+    Default: eu-west-1a
+    Description: The Availability Zone
+    AllowedValues:
+      - eu-west-1a
+      - eu-west-1b
+      - eu-west-1c
+  DBPassword:
+    Description: The database admin password
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    MaxLength: 41
+    AllowedPattern: '[a-zA-Z0-9]*'
+    ConstraintDescription: Must contain only alphanumeric characters, and be 8 to 41 characters in length.    
+  DBInstanceClass:
+    Description: The Database Instance class
+    Type: String
+    Default:  "db.t2.micro"

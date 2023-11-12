@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  FHIITJumpBox:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref KeyName
+      AvailabilityZone: !Ref AvailabilityZone
+      ImageId:  !Ref ImageID 
+      InstanceType: !Ref InstanceType
+      NetworkInterfaces:
+      - DeviceIndex: "0"
+        AssociatePublicIpAddress: true
+        SubnetId: !Ref FHIITPubSubnet
+        GroupSet:
+          - !Ref FHIITSubNetPubSecurityGroup
+      UserData: !Base64 |
+        #!/bin/bash -ex
+        # put your script here
+      Tags:
+        - Key: Project
+          Value: FHIIT
+        - Key: Name 
+          Value: FHIITJumpBox
+  FHIITAppInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref KeyName
+      AvailabilityZone: !Ref AvailabilityZone
+      ImageId:  !Ref ImageID 
+      InstanceType: !Ref InstanceType
+      SubnetId: !Ref FHIITPvtSubnet1
+      SecurityGroupIds:
+        - !Ref FHIITSubNetPvtSecurityGroup
+      UserData: !Base64 |
+        #!/bin/bash -ex
+        sudo yum update -y
+        sudo yum install -y mysql httpd php php-mysqlnd
+        sleep 20
+        sudo systemctl start httpd
+        sudo systemctl enable httpd
+        echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/phpinfo.php
+        # I am installing mysql client to demonstrate connection to the RDS instance
+      Tags:
+        - Key: Project
+          Value: FHIIT
+        - Key: Name 
+          Value:  FHIITAppInstance   

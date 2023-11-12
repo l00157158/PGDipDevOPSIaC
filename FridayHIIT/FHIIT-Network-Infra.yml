@@ -1,0 +1,192 @@
+Resources:
+  FHIITVPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 192.168.0.0/25
+      EnableDnsSupport: true
+      Tags:
+        - Key: Project
+          Value: FHIIT
+
+
+  FHIITElasticIP:
+    Type: "AWS::EC2::EIP"
+    Properties:
+      Domain: "vpc"
+
+
+  FHIITPubSubnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Ref AvailabilityZone
+      VpcId: !Ref FHIITVPC
+      CidrBlock: 192.168.0.64/27
+      Tags:
+        - Key: Project
+          Value: FHIIT
+
+  FHIITNATGateway:
+    Type: "AWS::EC2::NatGateway"
+    Properties:
+      AllocationId: !GetAtt FHIITElasticIP.AllocationId
+      SubnetId: !Ref FHIITPubSubnet
+      Tags:
+        - Key: Name
+          Value: "FHIITNATGateway"
+
+  FHIITPvtSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Ref AvailabilityZone
+      VpcId: !Ref FHIITVPC
+      CidrBlock: 192.168.0.0/27
+      Tags:
+        - Key: Project
+          Value: FHIIT
+  FHIITPvtSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Select [1, !GetAZs '']
+      VpcId: !Ref FHIITVPC
+      CidrBlock: 192.168.0.32/27
+      Tags:
+        - Key: Project
+          Value: FHIIT
+  FHIITMySQLSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Looks like a DB Subnet group is also required for RDS!
+      SubnetIds:
+        - !Ref FHIITPvtSubnet1
+        - !Ref FHIITPvtSubnet2
+      Tags:
+        - Key: Project
+          Value: FHIIT        
+
+  FHIITigw:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Project
+          Value: FHIIT
+  FHIITAttachGateway:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref FHIITVPC
+      InternetGatewayId: !Ref FHIITigw
+
+  FHIITPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref FHIITVPC
+      Tags:
+        - Key: Name 
+          Value: FHIITPublicRouteTable
+        - Key: Project
+          Value: FHIIT
+
+  FHIITPvtRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref FHIITVPC
+      Tags:
+        - Key: Name 
+          Value: FHIITPrivateRouteTable
+        - Key: Project
+          Value: FHIIT
+
+  FHIITPrivateRoute:
+    Type: "AWS::EC2::Route"
+    Properties:
+      RouteTableId: !Ref FHIITPvtRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: !Ref FHIITNATGateway
+
+  FHIITPvtSubnet1RouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref FHIITPvtSubnet1
+      RouteTableId: !Ref FHIITPvtRouteTable
+
+  FHIITPvtSubnet2RouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref FHIITPvtSubnet2
+      RouteTableId: !Ref FHIITPvtRouteTable
+    
+
+  FHIITPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: FHIITAttachGateway
+    Properties:
+      RouteTableId: !Ref FHIITPublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref FHIITigw
+
+  FHIITPubSubnetRouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref FHIITPubSubnet
+      RouteTableId: !Ref FHIITPublicRouteTable
+
+Outputs:
+  VPCId:
+    Description: "the VPAC ID"
+    Value: !Ref FHIITVPC
+
+  ElasticIP:
+    Description: "The Elastic IP ID"
+    Vlaue:  !Ref FHIITElasticIP
+  PubSubnetID: 
+    Description: "The public Subnet id"  
+    Value: !Ref FHIITPubSubnet  
+  
+  PvtSubNet1ID: 
+    Description: "The Private Subnet id"
+    Value: !Ref FHIITPvtSubnet1
+  
+  PvtSubNet2ID: 
+    Description: "The Private Subnet id"
+    Value: !Ref FHIITPvtSubnet2
+
+  SQLSubnetID:
+    Description: "The MySQL subnet group ID"
+    Value: !Ref FHIITMySQLSubnetGroup
+
+  InternetGatewayId:
+     Description: "The Internet Gatway ID" 
+     Value: !Ref FHIITigw
+
+  AttachGateWayID:
+    Description: "AttachGateway ID"
+    Value: !Ref FHIITAttachGateway
+  
+  PublicRouteTableID:
+    Description: "Public Route table ID"
+    Value: !Ref FHIITPublicRouteTable
+  
+  PrivateRouteTableID:
+    Description: "Private Route Table ID"
+    Value: !Ref FFHIITPvtRouteTable
+
+  PrivateRouteId:
+    Description: "The Private Route ID"
+    Value: !Ref FHIITPrivateRoute
+
+  PvtSubnet1RouteTableAssociationID:
+    Description: " private subnet1 Route Table association ID"
+    Value: !Ref FHIITPvtSubnet1RouteTableAssociation
+
+  PvtSubnet21RouteTableAssociationID:
+    Description: " private subnet1 Route Table association ID"
+    Value: !Ref FHIITPvtSubnet2RouteTableAssociation    
+
+  PublictRouteID:
+    Description: "The Public Route ID"
+    Value: !Ref FHIITPublicRoute
+
+  PubSubnetRouteTableAssociationID:
+    Description: "The public subnet Route table association Id"
+    Value: !Ref FHIITPubSubnetRouteTableAssociation
+
+  

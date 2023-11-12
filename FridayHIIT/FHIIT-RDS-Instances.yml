@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description:  Resource definition for Database instances 
+Resources:
+  # MySQL RDS instance
+  FHIITMySQLDB:
+    Type: "AWS::RDS::DBInstance"
+    Properties:
+      Engine: "mysql"
+      MasterUsername: "admin"
+      MasterUserPassword: !Ref DBPassword
+      DBInstanceClass: "db.t2.micro"
+      AllocatedStorage: "20"
+      DBSubnetGroupName: !Ref FHIITMySQLSubnetGroup
+      VPCSecurityGroups:
+        - !GetAtt FHIITMySQLSecurityGroup.GroupId    
