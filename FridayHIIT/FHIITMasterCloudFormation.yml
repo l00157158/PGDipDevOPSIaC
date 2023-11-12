@@ -5,60 +5,60 @@ Resources:
   ParametersStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIIT-Parameters.yml
+      TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIITParameters.yml
 
-  NFHIIT-Network-Infra:
+  NFHIITNetworkInfra:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIIT-Network-Infra.yml
+      TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIITNetworkInfra.yml
 
 
   SecurityGroupsStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIIT-Ec2-Sg.yml
+      TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIITEc2Sg.yml
 
   EC2InstancesStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIIT-EC2-Instances.yml
+      TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIITEC2Instances.yml
   
   RDSSecurityStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIIT-RDS-sg.yml
+      TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIITRDSsg.yml
 
   RDSDatabaseStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIIT-RDS-Instances.yml
+      TemplateURL: https://fhiit-cloudformation.s3.eu-west-1.amazonaws.com/FHIITRDSInstances.yml
 
 Outputs:
   VPCId:
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.VPCId
+    Value: !GetAtt FHIITNetworkInfra.Outputs.VPCId
   ElasticIP:
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.ElasticIP
+    Value: !GetAtt FHIITNetworkInfra.Outputs.ElasticIP
   PubSubnetID:
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.PubSubnetID
+    Value: !GetAtt FHIITNetworkInfra.Outputs.PubSubnetID
   PvtSubNet2ID: 
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.PvtSubNet2ID
+    Value: !GetAtt FHIITNetworkInfra.Outputs.PvtSubNet2ID
   SQLSubnetID:
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.SQLSubnetID
+    Value: !GetAtt FHIITNetworkInfra.Outputs.SQLSubnetID
   InternetGatewayId:
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.InternetGatewayId
+    Value: !GetAtt FHIITNetworkInfra.Outputs.InternetGatewayId
   AttachGateWayID:
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.AttachGateWayID
+    Value: !GetAtt FHIITNetworkInfra.Outputs.AttachGateWayID
   PublicRouteTableID:
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.PublicRouteTableID
+    Value: !GetAtt FHIITNetworkInfra.Outputs.PublicRouteTableID
   PrivateRouteTableID:
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.PrivateRouteTableID
+    Value: !GetAtt FHIITNetworkInfra.Outputs.PrivateRouteTableID
   PrivateRouteId:
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.PrivateRouteId
+    Value: !GetAtt FHIITNetworkInfra.Outputs.PrivateRouteId
   PvtSubnet1RouteTableAssociationID:
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.PvtSubnet1RouteTableAssociationID
+    Value: !GetAtt FHIITNetworkInfra.Outputs.PvtSubnet1RouteTableAssociationID
   PvtSubnet21RouteTableAssociationID:
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.PvtSubnet21RouteTableAssociationID
+    Value: !GetAtt FHIITNetworkInfra.Outputs.PvtSubnet21RouteTableAssociationID
   PublictRouteID:
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.PublictRouteID
+    Value: !GetAtt FHIITNetworkInfra.Outputs.PublictRouteID
   PubSubnetRouteTableAssociationID:
-    Value: !GetAtt FHIIT-Network-Infra.Outputs.PubSubnetRouteTableAssociationID
+    Value: !GetAtt FHIITNetworkInfra.Outputs.PubSubnetRouteTableAssociationID
