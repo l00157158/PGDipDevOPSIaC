@@ -35,32 +35,32 @@ Resources:
 
 Outputs:
   VPCId:
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.VPCId
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.VPCId
   ElasticIP:
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.ElasticIP
-  PPubSubnetID:
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.PubSubnetID
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.ElasticIP
+  PubSubnetID:
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.PubSubnetID
   PvtSubNet1ID: 
-   Value: !GetAtt NFHIIT-Network-Infra.Outputs.PvtSubNet1ID
+   Value: !GetAtt FHIIT-Network-Infra.Outputs.PvtSubNet1ID
   PvtSubNet2ID: 
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.PvtSubNet2ID
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.PvtSubNet2ID
   SQLSubnetID:
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.SQLSubnetID
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.SQLSubnetID
   InternetGatewayId:
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.InternetGatewayId
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.InternetGatewayId
   AttachGateWayID:
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.AttachGateWayID
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.AttachGateWayID
   PublicRouteTableID:
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.PublicRouteTableID
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.PublicRouteTableID
   PrivateRouteTableID:
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.PrivateRouteTableID
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.PrivateRouteTableID
   PrivateRouteId:
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.PrivateRouteId
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.PrivateRouteId
   PvtSubnet1RouteTableAssociationID:
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.PvtSubnet1RouteTableAssociationID
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.PvtSubnet1RouteTableAssociationID
   PvtSubnet21RouteTableAssociationID:
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.PvtSubnet21RouteTableAssociationID
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.PvtSubnet21RouteTableAssociationID
   PublictRouteID:
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.PublictRouteID
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.PublictRouteID
   PubSubnetRouteTableAssociationID:
-    Value: !GetAtt NFHIIT-Network-Infra.Outputs.PubSubnetRouteTableAssociationID
+    Value: !GetAtt FHIIT-Network-Infra.Outputs.PubSubnetRouteTableAssociationID
