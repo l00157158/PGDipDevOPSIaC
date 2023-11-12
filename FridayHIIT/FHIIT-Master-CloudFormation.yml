@@ -41,6 +41,7 @@ Outputs:
   PPubSubnetID:
     Value: !GetAtt NFHIIT-Network-Infra.Outputs.PubSubnetID
   PvtSubNet1ID: 
+   Value: !GetAtt NFHIIT-Network-Infra.Outputs.PvtSubNet1ID
   PvtSubNet2ID: 
     Value: !GetAtt NFHIIT-Network-Infra.Outputs.PvtSubNet2ID
   SQLSubnetID:
