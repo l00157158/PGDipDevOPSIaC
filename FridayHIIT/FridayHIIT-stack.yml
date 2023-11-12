@@ -40,6 +40,11 @@ Parameters:
     MaxLength: 41
     AllowedPattern: '[a-zA-Z0-9]*'
     ConstraintDescription: Must contain only alphanumeric characters, and be 8 to 41 characters in length.    
+  DBInstanceClass:
+    Description: The Database Instance class
+    Type: String
+    Default:  "db.t2.micro"
+    
 Resources:
   FHIITVPC:
     Type: 'AWS::EC2::VPC'
