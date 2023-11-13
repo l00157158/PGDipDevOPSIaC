@@ -157,6 +157,11 @@ Resources:
           CidrIp: 192.168.0.0/26
           Description: HTTPS access from IP address within Private subnet
         - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80  
+          CidrIp: 192.168.0.0/26
+          Description: HTTP access from IP address within Private subnet
+        - IpProtocol: tcp
           FromPort: '22'
           ToPort: '22'
           CidrIp: 192.168.0.0/25  # allows SSH from any IP within the VPC.
